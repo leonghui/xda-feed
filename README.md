@@ -17,4 +17,4 @@ http://<host>/xda-feed/3711635/
 ```
 
 Tested with:
-- [Nextcloud New App](https://github.com/nextcloud/news)
+- [Nextcloud News App](https://github.com/nextcloud/news)
