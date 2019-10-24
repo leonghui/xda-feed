@@ -18,16 +18,21 @@ parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
 
 
 def get_latest_json(thread_id):
-    data = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}").json()
+    post_request = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}")
+    response_body = post_request.json()
+
+    # return HTTP error code
+    if not post_request.ok:
+        return f"Error {post_request.status_code}"
 
     # return API error message
-    if data.get('error') is not None:
+    if response_body.get('error') is not None:
         return {
-            'error': data.get('error').get('code'),
-            'message': data.get('error').get('message')
+            'error': response_body.get('error').get('code'),
+            'message': response_body.get('error').get('message')
         }
 
-    thread_data = data.get('thread')
+    thread_data = response_body.get('thread')
 
     forum_title = thread_data.get('forumtitle')
 
@@ -35,7 +40,7 @@ def get_latest_json(thread_id):
 
     thread_title = thread_data.get('title')
 
-    last_page = int(data.get('total_pages'))
+    last_page = int(response_body.get('total_pages'))
 
     min_page = last_page - (page_limit - 1)
 
