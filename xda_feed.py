@@ -1,3 +1,4 @@
+import bleach
 import datetime
 import bbcode
 import requests
@@ -72,7 +73,7 @@ def get_latest_json(thread_id):
                 'id': post_id,
                 'url': FORUM_URL + thread_uri + '/post' + post_id,
                 'title': ' - '.join((thread_title, f"Page {page}")),
-                'content_html': parser.format(result['pagetext']),
+                'content_html': bleach.clean(parser.format(result['pagetext'])),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
                 'author': {
                     'name': result['username']
