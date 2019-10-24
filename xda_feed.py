@@ -4,7 +4,8 @@ import requests
 
 API_ENDPOINT = 'https://api.xda-developers.com/v3'
 FORUM_NAME = 'xda-developers'
-FORUM_ENDPOINT = 'https://forum.xda-developers.com'
+FORUM_URL = 'https://forum.xda-developers.com'
+FAVICON_PATH = '/images/2015/favicons/favicon.ico'
 JSONFEED_VERSION_URL = 'https://jsonfeed.org/version/1'
 
 XDA_POSTS_PER_THREAD = 10
@@ -57,7 +58,8 @@ def get_latest_json(thread_id):
     json_output = {
         'version': JSONFEED_VERSION_URL,
         'title': ' - '.join((FORUM_NAME, forum_title)),
-        'home_page_url': FORUM_ENDPOINT + thread_uri
+        'home_page_url': FORUM_URL + thread_uri,
+        'favicon': FORUM_URL + FAVICON_PATH
     }
 
     items_list = []
@@ -68,7 +70,7 @@ def get_latest_json(thread_id):
             time_stamp = int(result['dateline'])
             item = {
                 'id': post_id,
-                'url': FORUM_ENDPOINT + thread_uri + '/post' + post_id,
+                'url': FORUM_URL + thread_uri + '/post' + post_id,
                 'title': ' - '.join((thread_title, f"Page {page}")),
                 'content_html': parser.format(result['pagetext']),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
