@@ -15,6 +15,8 @@ page_limit = 1 if FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD < 1 else FEED_POSTS_L
 # use custom parser to handle additional tags, e.g. [mention]
 parser = bbcode.Parser()
 parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
+parser.add_simple_formatter('attach', f'<a rel=\"nofollow\" href=\"{API_ENDPOINT}/posts/attachment?attachmentid=%('
+                                      f'value)s\">{API_ENDPOINT}/posts/attachment?attachmentid=%(value)s</a>')
 
 
 def get_latest_json(thread_id):
