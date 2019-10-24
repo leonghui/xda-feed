@@ -1,4 +1,5 @@
-from flask import Flask, request, redirect, url_for, abort
+from flask import Flask, request, redirect, url_for
+
 from xda_feed import get_latest_json
 
 app = Flask(__name__)
