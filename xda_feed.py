@@ -71,7 +71,10 @@ def get_latest_json(thread_id):
                 'url': FORUM_ENDPOINT + thread_uri + '/post' + post_id,
                 'title': ' - '.join((thread_title, f"Page {page}")),
                 'content_html': parser.format(result['pagetext']),
-                'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T')
+                'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
+                'author': {
+                    'name': result['username']
+                }
             }
             items_list.append(item)
 
