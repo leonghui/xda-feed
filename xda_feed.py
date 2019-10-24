@@ -12,6 +12,10 @@ FEED_POSTS_LIMIT = 20  # default to 2 pages per page
 
 page_limit = 1 if FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD < 1 else FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD
 
+# use custom parser to handle additional tags, e.g. [mention]
+parser = bbcode.Parser()
+parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
+
 
 def get_latest_json(thread_id):
     data = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}").json()
@@ -59,7 +63,7 @@ def get_latest_json(thread_id):
                 'id': post_id,
                 'url': FORUM_ENDPOINT + thread_uri + '/post' + post_id,
                 'title': ' - '.join((thread_title, f"Page {page}")),
-                'content_html': bbcode.render_html(result['pagetext']),
+                'content_html': parser.format(result['pagetext']),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T')
             }
             items_list.append(item)
