@@ -33,7 +33,9 @@ def get_latest_json(thread_id):
 
     last_page = int(data.get('total_pages'))
 
-    start_page = last_page - (page_limit - 1)
+    min_page = last_page - (page_limit - 1)
+
+    start_page = 1 if min_page < 1 else min_page
 
     total_results = {}
 
