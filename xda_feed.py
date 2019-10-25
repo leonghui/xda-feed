@@ -21,7 +21,6 @@ parser.add_simple_formatter('attach', f'<a rel=\"nofollow\" href=\"{API_ENDPOINT
                                       f'value)s\">{API_ENDPOINT}/posts/attachment?attachmentid=%(value)s</a>')
 
 allowed_tags = bleach.ALLOWED_TAGS + ['br']
-print(allowed_tags)
 
 
 def get_latest_json(thread_id):
