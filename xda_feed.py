@@ -69,11 +69,11 @@ def get_latest_json(thread_id):
 
     for page, results in total_results.items():
         for result in results:
-            post_id = result['postid']
+            post_url = FORUM_URL + thread_uri + '/post' + result['postid']
             time_stamp = int(result['dateline'])
             item = {
-                'id': post_id,
-                'url': FORUM_URL + thread_uri + '/post' + post_id,
+                'id': post_url,
+                'url': post_url,
                 'title': ' - '.join((thread_title, f"Page {page}")),
                 'content_html': bleach.clean(
                     parser.format(result['pagetext']),
