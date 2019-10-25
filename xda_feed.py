@@ -14,13 +14,32 @@ FEED_POSTS_LIMIT = 20  # default to 2 pages per page
 
 page_limit = 1 if FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD < 1 else FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD
 
-# use custom parser to handle additional tags, e.g. [mention]
+
+def render_attachment(tag_name, value, options, parent, context):
+    dateline = context['dateline']
+
+    # (undocumented) append post dateline to attachment request following forum behaviour
+    attachment_url = f"{API_ENDPOINT}/posts/attachment?attachmentid={value}&d={dateline}"
+
+    attachment_request = requests.get(attachment_url)
+
+    content_type = attachment_request.headers.get('content-type')
+
+    if attachment_request.ok and content_type.startswith('image/'):
+        return f'<img src=\"{attachment_url}\" />'
+    else:
+        # forum rate-limiting may return status code 410
+        return f'<a rel=\"nofollow\" href=\"{attachment_url}\">{attachment_url}</a>'
+
+
+# use custom parser to handle additional tags, e.g. [mention], [attach]
 parser = bbcode.Parser()
 parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
-parser.add_simple_formatter('attach', f'<a rel=\"nofollow\" href=\"{API_ENDPOINT}/posts/attachment?attachmentid=%('
-                                      f'value)s\">{API_ENDPOINT}/posts/attachment?attachmentid=%(value)s</a>')
+parser.add_formatter('attach', render_attachment)
 
-allowed_tags = bleach.ALLOWED_TAGS + ['br']
+allowed_tags = bleach.ALLOWED_TAGS + ['br', 'img']
+allowed_attributes = bleach.ALLOWED_ATTRIBUTES.copy()
+allowed_attributes.update({'img': ['src']})
 
 
 def get_latest_json(thread_id):
@@ -76,8 +95,12 @@ def get_latest_json(thread_id):
                 'url': post_url,
                 'title': ' - '.join((thread_title, f"Page {page}")),
                 'content_html': bleach.clean(
-                    parser.format(result['pagetext']),
-                    allowed_tags
+                    parser.format(
+                        result['pagetext'],
+                        dateline=time_stamp
+                    ),
+                    tags=allowed_tags,
+                    attributes=allowed_attributes
                 ),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
                 'author': {
