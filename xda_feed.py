@@ -20,6 +20,9 @@ parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
 parser.add_simple_formatter('attach', f'<a rel=\"nofollow\" href=\"{API_ENDPOINT}/posts/attachment?attachmentid=%('
                                       f'value)s\">{API_ENDPOINT}/posts/attachment?attachmentid=%(value)s</a>')
 
+allowed_tags = bleach.ALLOWED_TAGS + ['br']
+print(allowed_tags)
+
 
 def get_latest_json(thread_id):
     post_request = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}")
@@ -73,7 +76,10 @@ def get_latest_json(thread_id):
                 'id': post_id,
                 'url': FORUM_URL + thread_uri + '/post' + post_id,
                 'title': ' - '.join((thread_title, f"Page {page}")),
-                'content_html': bleach.clean(parser.format(result['pagetext'])),
+                'content_html': bleach.clean(
+                    parser.format(result['pagetext']),
+                    allowed_tags
+                ),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
                 'author': {
                     'name': result['username']
