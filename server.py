@@ -1,6 +1,6 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, jsonify
 
-from xda_feed import get_latest_json
+from xda_feed import get_latest_posts
 
 app = Flask(__name__)
 
@@ -23,9 +23,9 @@ def form():
 
 @app.route('/xda-feeds/<thread_id>/')
 def hello(thread_id):
-    output = get_latest_json(thread_id)
+    output = get_latest_posts(thread_id)
     if output is not None:
-        return output
+        return jsonify(output)
     else:
         return 'Error'
 

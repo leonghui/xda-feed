@@ -42,7 +42,7 @@ allowed_attributes = bleach.ALLOWED_ATTRIBUTES.copy()
 allowed_attributes.update({'img': ['src']})
 
 
-def get_latest_json(thread_id):
+def get_latest_posts(thread_id):
     post_request = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}")
     response_body = post_request.json()
 
@@ -77,7 +77,7 @@ def get_latest_json(thread_id):
         page_data = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}&page={page}").json()
         total_results[page_data['current_page']] = page_data['results']
 
-    json_output = {
+    output = {
         'version': JSONFEED_VERSION_URL,
         'title': ' - '.join((FORUM_NAME, forum_title)),
         'home_page_url': FORUM_URL + thread_uri,
@@ -109,6 +109,6 @@ def get_latest_json(thread_id):
             }
             items_list.append(item)
 
-    json_output['items'] = items_list
+    output['items'] = items_list
 
-    return json_output
+    return output
