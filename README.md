@@ -5,7 +5,7 @@ Uses the [official API](https://api.xda-developers.com/explorer/) and served ove
 
 Use the [Docker build](https://hub.docker.com/r/leonghui/xda-feed) to host your own instance.
 
-Access the feed using the URL: `http://<host>/xda-feed/{threadid}/`
+Access the feed using the URL: `http://<host>/{threadid}/`
 
 E.g.
 ```
@@ -13,7 +13,7 @@ Forum thread:
 https://forum.xda-developers.com/android/development/wireguard-rom-integration-t3711635
 
 Feed link:
-http://<host>/xda-feed/3711635/
+http://<host>/3711635/
 ```
 
 Tested with:
