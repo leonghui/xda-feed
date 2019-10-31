@@ -5,7 +5,7 @@ from xda_feed import get_latest_posts
 app = Flask(__name__)
 
 
-@app.route('/xda-feed/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def form():
     if request.method == 'POST':
         input_text = request.form['input']
@@ -21,7 +21,7 @@ def form():
     '''
 
 
-@app.route('/xda-feeds/<thread_id>/')
+@app.route('/<thread_id>/')
 def hello(thread_id):
     output = get_latest_posts(thread_id)
     if output is not None:
