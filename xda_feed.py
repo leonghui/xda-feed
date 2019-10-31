@@ -10,7 +10,7 @@ FAVICON_PATH = '/images/2015/favicons/favicon.ico'
 JSONFEED_VERSION_URL = 'https://jsonfeed.org/version/1'
 
 XDA_POSTS_PER_THREAD = 10
-FEED_POSTS_LIMIT = 20  # default to 2 pages per page
+FEED_POSTS_LIMIT = 20  # default to 2 pages per feed
 
 page_limit = 1 if FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD < 1 else FEED_POSTS_LIMIT // XDA_POSTS_PER_THREAD
 
