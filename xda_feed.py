@@ -33,13 +33,15 @@ def render_attachment(tag_name, value, options, parent, context):
 
 
 # use custom parser to handle additional tags, e.g. [mention], [attach]
-parser = bbcode.Parser()
+parser = bbcode.Parser(drop_unrecognized=True)
 parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
 parser.add_formatter('attach', render_attachment)
 
-allowed_tags = bleach.ALLOWED_TAGS + ['br', 'img']
+allowed_tags = bleach.ALLOWED_TAGS + ['br', 'img', 'span']
 allowed_attributes = bleach.ALLOWED_ATTRIBUTES.copy()
 allowed_attributes.update({'img': ['src']})
+allowed_attributes.update({'span': ['style']})
+allowed_styles = ['color']
 
 
 def get_latest_posts(thread_id):
@@ -100,7 +102,8 @@ def get_latest_posts(thread_id):
                         dateline=time_stamp
                     ),
                     tags=allowed_tags,
-                    attributes=allowed_attributes
+                    attributes=allowed_attributes,
+                    styles=allowed_styles
                 ),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
                 'author': {
