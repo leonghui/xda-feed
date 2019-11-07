@@ -37,7 +37,7 @@ parser = bbcode.Parser(drop_unrecognized=True)
 parser.add_simple_formatter('mention', '@%(value)s', render_embedded=True)
 parser.add_formatter('attach', render_attachment)
 
-allowed_tags = bleach.ALLOWED_TAGS + ['br', 'img', 'span']
+allowed_tags = bleach.ALLOWED_TAGS + ['br', 'img', 'span', 'u']
 allowed_attributes = bleach.ALLOWED_ATTRIBUTES.copy()
 allowed_attributes.update({'img': ['src']})
 allowed_attributes.update({'span': ['style']})
