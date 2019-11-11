@@ -44,7 +44,7 @@ allowed_attributes.update({'span': ['style']})
 allowed_styles = ['color']
 
 
-def get_latest_posts(thread_id):
+def get_latest_posts(thread_id, username_list):
     post_request = requests.get(f"{API_ENDPOINT}/posts?threadid={thread_id}")
     response_body = post_request.json()
 
@@ -66,6 +66,14 @@ def get_latest_posts(thread_id):
     thread_uri = thread_data.get('web_uri')
 
     thread_title = thread_data.get('title')
+
+    thread_title_list = [FORUM_NAME, forum_title]
+
+    username_lower_list = []
+
+    if username_list:
+        thread_title_list.append(f"Posts by {', '.join(username_list)}")
+        username_lower_list = [username.lower().strip() for username in username_list]
 
     last_page = int(response_body.get('total_pages'))
 
@@ -92,10 +100,18 @@ def get_latest_posts(thread_id):
         for result in results:
             post_url = FORUM_URL + thread_uri + '/post' + result['postid']
             time_stamp = int(result['dateline'])
+
+            post_title_list = [thread_title, f"Page {page}"]
+
+            if username_list:
+                post_title_list.append(f"Posts by {', '.join(username_list)}")
+
+            post_author_text = result['username']
+
             item = {
                 'id': post_url,
                 'url': post_url,
-                'title': ' - '.join((thread_title, f"Page {page}")),
+                'title': ' - '.join(post_title_list),
                 'content_html': bleach.clean(
                     parser.format(
                         result['pagetext'],
@@ -107,10 +123,12 @@ def get_latest_posts(thread_id):
                 ),
                 'date_published': datetime.datetime.utcfromtimestamp(time_stamp).isoformat('T'),
                 'author': {
-                    'name': result['username']
+                    'name': post_author_text
                 }
             }
-            items_list.append(item)
+            if not username_lower_list or\
+                    (username_lower_list and post_author_text.lower().strip() in username_lower_list):
+                items_list.append(item)
 
     output['items'] = items_list
 
