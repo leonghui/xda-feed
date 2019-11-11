@@ -89,7 +89,7 @@ def get_latest_posts(thread_id, username_list):
 
     output = {
         'version': JSONFEED_VERSION_URL,
-        'title': ' - '.join((FORUM_NAME, forum_title)),
+        'title': ' - '.join(thread_title_list),
         'home_page_url': FORUM_URL + thread_uri,
         'favicon': FORUM_URL + FAVICON_PATH
     }
