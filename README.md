@@ -5,7 +5,11 @@ Uses the [official API](https://api.xda-developers.com/explorer/) and served ove
 
 Use the [Docker build](https://hub.docker.com/r/leonghui/xda-feed) to host your own instance.
 
-Access the feed using the URL: `http://<host>/{threadid}/`
+1. Set your timezone as an environment variable (see [docker docs]): `TZ=America/Los_Angeles` 
+
+2. Access the feed using the URL: `http://<host>/?thread_id={id}`
+
+3. Optionally, filter by user names: `http://<host>/?thread_id={id}&usernames={user1,user2}`
 
 E.g.
 ```
@@ -13,8 +17,13 @@ Forum thread:
 https://forum.xda-developers.com/android/development/wireguard-rom-integration-t3711635
 
 Feed link:
-http://<host>/3711635/
+http://<host>/?thread_id=3711635
+
+Filtered feed link:
+http://<host>/?thread_id=3711635&usernames=zx2c4
 ```
 
 Tested with:
 - [Nextcloud News App](https://github.com/nextcloud/news)
+
+[docker docs]:(https://docs.docker.com/compose/environment-variables/#set-environment-variables-in-containers)
