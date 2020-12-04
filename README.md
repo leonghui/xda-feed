@@ -1,4 +1,7 @@
 # xda-feed
+*Note:
+XDA API endpoint has been discontinued as of December 1st 2020. Please see: https://www.xda-developers.com/big-changes-to-xda-forums-are-coming-soon/*
+
 A simple Python script to generate a [JSON Feed](https://github.com/brentsimmons/JSONFeed) for threads on [XDA Developers](https://www.xda-developers.com).
 
 Uses the [official API](https://api.xda-developers.com/explorer/) and served over [Flask!](https://github.com/pallets/flask/)
